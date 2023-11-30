@@ -1,0 +1,136 @@
+[build-system]
+requires = ["setuptools>=65.5.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastapi-blog"
+version = "0.1.0"
+description = "Backend API for blog that was developed using FastAPI."
+authors = [
+    {name = "akiko23", email = "dmvasilenko43@gmail.com"},
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+  "fastapi==0.104.1",
+  "asyncpg==0.29.0",
+  "SQLAlchemy==2.0.23",
+  "alembic==1.12.1",
+  "uvicorn==0.24.0.post1",
+  "PyJWT==2.8.0",
+  "pydantic-settings==2.1.0",
+  "pydantic[email]==2.5.2",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==7.4.3",
+    "pytest-asyncio==0.21.1",
+]
+lint = [
+    "mypy==1.7.1",
+    "black==23.11.0",
+    "isort==5.12.0",
+    "ruff==0.1.6",
+    "bandit==1.7.5", 
+]
+
+[project.urls]
+"Homepage" = "https://github.com/akiko23/fastapi-blog"
+"Bug Tracker" = "https://github.com/akiko23/fastapi-blog/issues"
+
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "migrations/versions"
+]
+
+# Same as Black.
+line-length = 98
+indent-width = 4
+
+# Assume Python 3.8
+target-version = "py38"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+
+# Isort configuration
+[tool.isort]
+include_trailing_comma = true
+use_parentheses = true
+multi_line_output = 3
+
+
+[tool.mypy]
+strict = true
+python_version = "3.8"
+ignore_missing_imports = true
+install_types = true
+non_interactive = true
+plugins = [
+    "pydantic.mypy"
+]
+
+# from https://blog.wolt.com/engineering/2021/09/30/professional-grade-mypy-configuration/
+disallow_untyped_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+warn_unused_ignores = false
+
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_any_unimported = false
+
+
