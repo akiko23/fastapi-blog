@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
-
+# You can replace this consts values with your own awesome ones :D
 DEFAULT_TITLE: str = 'fastapi-blog'
 DEFAULT_DESCRIPTION: str = 'A sample blog developed using FastAPI'
 DEFAULT_HOST: str = '0.0.0.0'
@@ -58,7 +58,7 @@ def load_app_config(dotenv_path: Optional[str] = None) -> AppSettings:
     port: int = os.getenv('PORT') or DEFAULT_PORT
     log_level: str = os.getenv('LOG_LEVEL') or DEFAULT_LOG_LEVEL
 
-    # Required args
+    # Required args (if not in env file, an error occurs)
     db_user: str = get_env_var_or_err('DB_USER')
     db_password: str = get_env_var_or_err('DB_PASSWORD')
     db_name: str = get_env_var_or_err('DB_NAME')
