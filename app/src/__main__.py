@@ -7,7 +7,7 @@ import uvicorn
 from src.database.session import create_session_maker, create_session
 from src.dependencies import get_session_stub
 
-from config import load_app_config, AppSettings
+from src.config import load_app_config, AppSettings
 
 
 def initialise_routers(app: FastAPI) -> None:
