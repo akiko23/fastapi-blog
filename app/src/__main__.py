@@ -9,6 +9,8 @@ from src.dependencies import get_session_stub
 
 from src.config import load_app_config, AppSettings
 
+APP_DOTENV_PATH = 'src/.env'
+
 
 def initialise_routers(app: FastAPI) -> None:
     pass
@@ -28,7 +30,7 @@ def create_app(config: AppSettings) -> FastAPI:
 
 
 async def main():
-    config = load_app_config('src/.env')
+    config = load_app_config(APP_DOTENV_PATH)
     app = create_app(config)
 
     initialise_routers(app)
