@@ -7,5 +7,5 @@ RUN apt-get update
 RUN pip install .
 
 ENV PYTHONPATH="${PYTHONPATH}:/app/"
-CMD ["python", "src/main.py"]
+CMD ["python", "-m", "src"]
 
