@@ -16,7 +16,7 @@ def create_session_maker(db_uri: str):
         pool_size=15,
         max_overflow=15,
         connect_args={
-            "connect_timeout": 5,
+            "timeout": 5,
         },
     )
     return sessionmaker(engine, class_=AsyncSession, autoflush=False, expire_on_commit=False)
