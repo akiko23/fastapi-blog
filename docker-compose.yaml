@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: app/Dockerfile
+      dockerfile: Dockerfile
     container_name: app
     ports:
       - "8000:8000"

@@ -1,5 +1,5 @@
 FROM python:3.9-slim
-COPY ./app /app
+COPY . /app
 
 WORKDIR /app
 
@@ -8,4 +8,3 @@ RUN pip install .
 
 ENV PYTHONPATH="${PYTHONPATH}:/app/"
 CMD ["python", "-m", "src"]
-
