@@ -1,7 +1,6 @@
-from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from sqlalchemy import String, CheckConstraint, ForeignKey, func
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.base import Base
@@ -27,8 +26,3 @@ class Comment(Base, TablenameMixin, TimestampColumnsMixin):
     user: Mapped['User'] = relationship(back_populates='comments', foreign_keys=[user_id])
     post: Mapped['Post'] = relationship(back_populates='comments', foreign_keys=[post_id])
     likes: Mapped[list['Like']] = relationship(back_populates='comment', cascade='all, delete')
-
-    __table_args__ = (
-        CheckConstraint('char_length(text) > 0',
-                        name='comment_min_length'),
-    )
