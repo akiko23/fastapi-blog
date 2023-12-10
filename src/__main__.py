@@ -9,7 +9,7 @@ from src.app_setup import (
 )
 from src.config import load_app_config
 
-APP_DOTENV_PATH = "src/.env"
+APP_DOTENV_PATH = ".envs/app.env"
 
 
 async def main() -> None:
