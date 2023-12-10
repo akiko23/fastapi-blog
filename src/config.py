@@ -8,11 +8,11 @@ from dotenv import load_dotenv
 logger = logging.getLogger(__name__)
 
 # You can replace this consts values with your own awesome ones :D
-DEFAULT_TITLE: str = "fastapi-blog"
-DEFAULT_DESCRIPTION: str = "A sample blog developed using FastAPI"
-DEFAULT_HOST: str = "0.0.0.0"
-DEFAULT_PORT: int = 8000
-DEFAULT_LOG_LEVEL: str = "info"
+DEFAULT_APP_TITLE: str = "fastapi-blog"
+DEFAULT_APP_DESCRIPTION: str = "A sample blog developed using FastAPI"
+DEFAULT_APP_HOST: str = "0.0.0.0"
+DEFAULT_APP_PORT: int = 8000
+DEFAULT_APP_LOG_LEVEL: str = "info"
 
 
 class ConfigParseError(ValueError):
@@ -52,11 +52,11 @@ def load_app_config(dotenv_path: Optional[str] = None) -> AppSettings:
     load_dotenv(dotenv_path)
 
     # Optional args (have default values)
-    app_title = os.getenv("APP_TITLE") or DEFAULT_TITLE
-    app_description: str = os.getenv("APP_DESCRIPTION") or DEFAULT_DESCRIPTION
-    host: str = os.getenv("HOST") or DEFAULT_HOST
-    port: int = cast(int, os.getenv("PORT")) or DEFAULT_PORT
-    log_level: str = os.getenv("LOG_LEVEL") or DEFAULT_LOG_LEVEL
+    app_title = os.getenv("APP_TITLE") or DEFAULT_APP_TITLE
+    app_description: str = os.getenv("APP_DESCRIPTION") or DEFAULT_APP_DESCRIPTION
+    host: str = os.getenv("APP_HOST") or DEFAULT_APP_HOST
+    port: int = cast(int, os.getenv("APP_PORT")) or DEFAULT_APP_PORT
+    log_level: str = os.getenv("APP_LOG_LEVEL") or DEFAULT_APP_LOG_LEVEL
 
     # Required args (if not in env file, an error occurs)
     db_user: str = get_env_var_or_err("DB_USER")

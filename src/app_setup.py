@@ -1,14 +1,21 @@
 from functools import partial
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
 from src.config import AppSettings
 from src.database.session import create_session, create_session_maker
 from src.dependencies import get_session_stub
 
+router = APIRouter()
+
+
+@router.get("/")
+async def read_main():
+    return {"msg": "Welcome to FastAPI-blog!"}
+
 
 def initialise_routers(app: FastAPI) -> None:
-    pass
+    app.include_router(router)
 
 
 def initialise_dependencies(app: FastAPI, config: AppSettings) -> None:
