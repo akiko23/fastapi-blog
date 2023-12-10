@@ -10,7 +10,18 @@ services:
     restart: always
     depends_on:
       - psql
+      - db_migration
 
+  db_migration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: db_migration
+    restart: "on-failure"
+    depends_on:
+      - psql
+    env_file: .envs/app.env
+    command: sh -c "python -m alembic upgrade head"
 
   psql:
     image: postgres:16.0-alpine3.18
@@ -21,6 +32,4 @@ services:
       - "5432:5432" 
     volumes:
       - /fastapi-blog/postgresql/data:/var/lib/postgresql/data
-    restart: always 
-
-
+    restart: always
