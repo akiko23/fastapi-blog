@@ -4,7 +4,6 @@ from typing import AsyncGenerator, Generator, TypeAlias
 
 import pytest
 import pytest_asyncio
-import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import (
@@ -14,13 +13,13 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import sessionmaker
 
-from src.app_setup import create_app
+from src.app_setup import create_app, initialise_routers
 from src.config import AppSettings, load_app_config
 from src.database.base import Base
 from src.database.session import create_session, create_session_maker
 from src.entity.models import *  # noqa
 
-TEST_DOTENV_PATH = "tests/.env"
+TEST_DOTENV_PATH = ".envs/test.env"
 TEST_DB_PATH = "tests/test.db"
 TEST_DB_DSN = f"sqlite+aiosqlite:///{TEST_DB_PATH}"
 
@@ -40,18 +39,11 @@ def config() -> AppSettings:
 
 
 @pytest.fixture(scope="session")
-async def app(config: AppSettings) -> AsyncGenerator[FastAPI, None]:
+def app(config: AppSettings) -> FastAPI:
     app = create_app(config)
+    initialise_routers(app)
 
-    uvicorn_config = uvicorn.Config(
-        app, host=config.host, port=config.port, log_level=config.log_level
-    )
-
-    server = uvicorn.Server(uvicorn_config)
-
-    await server.serve()
-    yield app
-    await server.shutdown()
+    return app
 
 
 @pytest.fixture(scope="session")
@@ -84,8 +76,8 @@ def session_factory() -> SessionMaker:
 
 
 @pytest.fixture(scope="session")
-async def override_session(
-    session_factory: SessionMaker,
+async def session(
+        session_factory: SessionMaker,
 ) -> AsyncGenerator[AsyncSession, None]:
     async with create_session(session_factory) as session:
         yield session
