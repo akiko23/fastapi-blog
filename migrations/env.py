@@ -13,7 +13,7 @@ from src.entity.models import *  # noqa
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-dev_cfg = load_app_config("src/.env")
+dev_cfg = load_app_config(".envs/app.env")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

@@ -5,7 +5,7 @@ from typing import AsyncGenerator, Generator, TypeAlias
 import pytest
 import pytest_asyncio
 from fastapi import FastAPI
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -16,8 +16,11 @@ from sqlalchemy.orm import sessionmaker
 from src.app_setup import create_app, initialise_routers
 from src.config import AppSettings, load_app_config
 from src.database.base import Base
-from src.database.session import create_session, create_session_maker
+from src.database.dependencies import create_session
+from src.database.sa_utils import create_session_maker
 from src.entity.models import *  # noqa
+
+BASE_URL = "http://test"
 
 TEST_DOTENV_PATH = ".envs/test.env"
 TEST_DB_PATH = "tests/test.db"
@@ -46,9 +49,10 @@ def app(config: AppSettings) -> FastAPI:
     return app
 
 
-@pytest.fixture(scope="session")
-def client(app: FastAPI) -> TestClient:
-    return TestClient(app)
+@pytest_asyncio.fixture(scope="session")
+async def client(app: FastAPI) -> AsyncClient:
+    async with AsyncClient(app=app, base_url=BASE_URL) as ac:
+        yield ac
 
 
 @pytest.fixture(scope="session")
@@ -58,8 +62,7 @@ def db_path() -> str:
 
 @pytest.fixture(scope="session")
 def engine() -> AsyncEngine:
-    engine = create_async_engine(TEST_DB_DSN, echo=False)
-    return engine
+    return create_async_engine(TEST_DB_DSN, echo=False)
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
@@ -70,8 +73,8 @@ async def initialise_test_db(engine: AsyncEngine) -> None:
 
 
 @pytest.fixture(scope="session")
-def session_factory() -> SessionMaker:
-    session_maker = create_session_maker(TEST_DB_DSN)
+def session_factory(engine: AsyncEngine) -> SessionMaker:
+    session_maker = create_session_maker(engine)
     return session_maker
 
 

@@ -1,5 +1,5 @@
-from typing import NoReturn
+from src.config import load_app_config
 
 
-def get_session_stub() -> NoReturn:
-    raise NotImplementedError
+def get_config(dotenv_path: str):
+    return load_app_config(dotenv_path)

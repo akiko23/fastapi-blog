@@ -8,8 +8,7 @@ from src.app_setup import (
     initialise_routers,
 )
 from src.config import load_app_config
-
-APP_DOTENV_PATH = ".envs/app.env"
+from src.consts import APP_DOTENV_PATH
 
 
 async def main() -> None:

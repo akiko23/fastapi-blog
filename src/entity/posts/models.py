@@ -16,11 +16,7 @@ MAX_POST_TEXT_LENGTH = 4096
 
 
 class Post(Base, TablenameMixin, TimestampColumnsMixin):
-    """Represent table 'posts' in database.
-
-    Args:
-
-    """
+    """Represent table 'posts' in database."""
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String(MAX_POST_TITLE_LENGTH))

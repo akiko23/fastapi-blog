@@ -1,27 +1,24 @@
-from typing import TYPE_CHECKING
+from datetime import datetime
 
-from sqlalchemy import String
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.base import Base
-from src.database.mixins import TablenameMixin, TimestampColumnsMixin
-
-if TYPE_CHECKING:
-    from src.entity.comments.models import Comment
-    from src.entity.likes.models import Like
-    from src.entity.posts.models import Post
+from src.database.mixins import TablenameMixin
+from src.entity.comments.models import Comment
+from src.entity.likes.models import Like
+from src.entity.posts.models import Post
 
 MAX_NICKNAME_LENGTH = 64
-MAX_EMAIL_LENGTH = 128
 
 
-class User(Base, TablenameMixin, TimestampColumnsMixin):
+class User(Base, TablenameMixin, SQLAlchemyBaseUserTable):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    nickname: Mapped[str] = mapped_column(
-        String(MAX_NICKNAME_LENGTH), default="pidoras"
+    username: Mapped[str] = mapped_column(
+        String(MAX_NICKNAME_LENGTH), unique=True
     )
-    email: Mapped[str] = mapped_column(String(MAX_EMAIL_LENGTH))
-    password: Mapped[str] = mapped_column()
+    registered_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     # relationships
     posts: Mapped[list["Post"]] = relationship(
