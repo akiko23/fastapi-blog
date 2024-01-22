@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import sessionmaker
 
 from src.app_setup import create_app, initialise_routers
-from src.config import AppSettings, load_app_config
+from src.config import BackendConfig, load_app_config
 from src.database.base import Base
 from src.database.dependencies import create_session
 from src.database.sa_utils import create_session_maker
@@ -37,12 +37,12 @@ def event_loop() -> Generator[AbstractEventLoop, None, None]:
 
 
 @pytest.fixture(scope="session")
-def config() -> AppSettings:
+def config() -> BackendConfig:
     return load_app_config(TEST_DOTENV_PATH)
 
 
 @pytest.fixture(scope="session")
-def app(config: AppSettings) -> FastAPI:
+def app(config: BackendConfig) -> FastAPI:
     app = create_app(config)
     initialise_routers(app)
 

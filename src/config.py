@@ -1,49 +1,26 @@
 import logging
-import os
 from dataclasses import dataclass
-from types import NoneType
-from typing import Any, Optional, TypeVar
 
 from dotenv import load_dotenv
+
+import os
+from types import NoneType
+from typing import Any, TypeVar, Optional
 
 logger = logging.getLogger(__name__)
 
 # You can replace this consts values with your own awesome ones :D
 DEFAULT_APP_TITLE: str = "fastapi-blog"
 DEFAULT_APP_DESCRIPTION: str = "A sample blog developed using FastAPI"
-DEFAULT_APP_HOST: str = "0.0.0.0"
-DEFAULT_APP_PORT: int = 8000
-DEFAULT_APP_LOG_LEVEL: str = "info"
+DEFAULT_SERVER_HOST: str = "0.0.0.0"
+DEFAULT_SERVER_PORT: int = 8000
+DEFAULT_SERVER_LOG_LEVEL: str = "info"
 
 T = TypeVar("T")
 
 
 class ConfigParseError(ValueError):
     pass
-
-
-@dataclass
-class AppSettings:
-    app_title: str
-    app_description: str
-    host: str
-    port: int
-    log_level: str
-    jwt_secret: str
-    # jwt_private_key_path: Path
-    # jwt_public_key_path: Path
-
-    db_user: str
-    db_password: str
-    db_name: str
-    db_host: str
-    db_port: int
-
-    def __post_init__(self) -> None:
-        self.db_uri = (
-            f"postgresql+asyncpg://{self.db_user}:{self.db_password}@"
-            f"{self.db_host}:{self.db_port}/{self.db_name}"
-        )
 
 
 def get_env_var_or_err(name: str) -> str:
@@ -60,40 +37,67 @@ def cast_var(type_: type[T], name: str, value: Any) -> T:
     except (TypeError, ValueError):
         var_type = type(value)
         if var_type is NoneType:
-            return
+            return None
 
         logger.error("Type of %s must be %s, not %s", name, type_, var_type)
         raise ConfigParseError(f"Type of {name} must be {type_.__name__}, not {var_type.__name__}")
 
 
-def load_app_config(dotenv_path: Optional[str] = None) -> AppSettings:
+@dataclass
+class AppConfig:
+    title: str
+    description: str
+    jwt_secret: str
+
+
+@dataclass
+class HttpServerConfig:
+    host: str
+    port: int
+    log_level: str
+
+
+@dataclass
+class Database:
+    user: str
+    password: str
+    name: str
+    host: str
+    port: int
+
+    def __post_init__(self) -> None:
+        self.uri = (
+            f"postgresql+asyncpg://{self.user}:{self.password}@"
+            f"{self.host}:{self.port}/{self.name}"
+        )
+
+
+@dataclass
+class BackendConfig:
+    app: AppConfig
+    http_server: HttpServerConfig
+    db: Database
+
+
+def load_app_config(dotenv_path: Optional[str] = None) -> BackendConfig:
     load_dotenv(dotenv_path)
 
-    # Optional args (have default values)
-    app_title = os.getenv("APP_TITLE") or DEFAULT_APP_TITLE
-    app_description: str = os.getenv("APP_DESCRIPTION") or DEFAULT_APP_DESCRIPTION
-    host: str = os.getenv("APP_HOST") or DEFAULT_APP_HOST
-    port: int = cast_var(int, "APP_PORT", os.getenv("APP_PORT")) or DEFAULT_APP_PORT
-    log_level: str = os.getenv("APP_LOG_LEVEL") or DEFAULT_APP_LOG_LEVEL
-
-    # Required args (if not in env file, an error occurs)
-    jwt_secret: str = os.getenv("JWT_SECRET")
-    db_user: str = get_env_var_or_err("DB_USER")
-    db_password: str = get_env_var_or_err("DB_PASSWORD")
-    db_name: str = get_env_var_or_err("DB_NAME")
-    db_host: str = get_env_var_or_err("DB_HOST")
-    db_port: int = int(get_env_var_or_err("DB_PORT"))
-
-    return AppSettings(
-        app_title,
-        app_description,
-        host,
-        port,
-        log_level,
-        jwt_secret,
-        db_user,
-        db_password,
-        db_name,
-        db_host,
-        db_port,
+    return BackendConfig(
+        app=AppConfig(
+            title=os.getenv("APP_TITLE", DEFAULT_APP_TITLE),
+            description=os.getenv("APP_DESCRIPTION", DEFAULT_APP_DESCRIPTION),
+            jwt_secret=get_env_var_or_err("JWT_SECRET"),
+        ),
+        http_server=HttpServerConfig(
+            host=os.getenv("APP_HOST", DEFAULT_SERVER_HOST),
+            port=cast_var(int, "APP_PORT", os.getenv("APP_PORT", DEFAULT_SERVER_PORT)),
+            log_level=os.getenv("APP_LOG_LEVEL", DEFAULT_SERVER_LOG_LEVEL),
+        ),
+        db=Database(
+            user=get_env_var_or_err("DB_USER"),
+            password=get_env_var_or_err("DB_PASSWORD"),
+            name=get_env_var_or_err("DB_NAME"),
+            host=get_env_var_or_err("DB_HOST"),
+            port=cast_var(int, "DB_PORT", get_env_var_or_err("DB_PORT")),
+        )
     )

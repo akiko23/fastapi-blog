@@ -2,7 +2,7 @@ from functools import partial
 
 from fastapi import APIRouter, FastAPI
 
-from src.config import AppSettings
+from src.config import BackendConfig
 from src.consts import APP_DOTENV_PATH
 from src.database.dependencies import get_session
 from src.database.sa_utils import create_engine, create_session_maker
@@ -24,8 +24,8 @@ def initialise_routers(app: FastAPI) -> None:
     app.include_router(auth_router)
 
 
-def initialise_dependencies(app: FastAPI, config: AppSettings) -> None:
-    engine = create_engine(config.db_uri)
+def initialise_dependencies(app: FastAPI, config: BackendConfig) -> None:
+    engine = create_engine(config.db.uri)
     session_factory = create_session_maker(engine)
 
     app.dependency_overrides[get_session_stub] = partial(
@@ -36,6 +36,6 @@ def initialise_dependencies(app: FastAPI, config: AppSettings) -> None:
     )
 
 
-def create_app(config: AppSettings) -> FastAPI:
-    app = FastAPI(title=config.app_title, description=config.app_description)
+def create_app(config: BackendConfig) -> FastAPI:
+    app = FastAPI(title=config.app.title, description=config.app.description)
     return app

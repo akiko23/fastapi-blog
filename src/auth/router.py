@@ -7,7 +7,7 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 
-from src.config import AppSettings
+from src.config import BackendConfig
 from src.auth.user_manager import get_user_manager
 from src.entity.users.schemas import UserCreate, UserRead
 from src.stubs import get_config_stub
@@ -15,8 +15,8 @@ from src.stubs import get_config_stub
 router = APIRouter()
 
 
-def get_jwt_strategy(config: AppSettings = Depends(get_config_stub)) -> JWTStrategy:
-    return JWTStrategy(secret=config.jwt_secret, lifetime_seconds=3600)
+def get_jwt_strategy(config: BackendConfig = Depends(get_config_stub)) -> JWTStrategy:
+    return JWTStrategy(secret=config.app.jwt_secret, lifetime_seconds=3600)
 
 
 auth_backend = AuthenticationBackend(

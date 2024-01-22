@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi_users import fastapi_users
 
-from src.entity.auth.router import authenticator
-from src.entity.auth.user_manager import get_user_manager
+from src.auth.router import authenticator
+from src.auth.user_manager import get_user_manager
 from src.entity.users.schemas import UserRead, UserUpdate
 
 router = APIRouter()

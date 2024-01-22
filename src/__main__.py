@@ -19,7 +19,7 @@ async def main() -> None:
     initialise_dependencies(app, config)
 
     uvicorn_config = uvicorn.Config(
-        app, host=config.host, port=config.port, log_level=config.log_level
+        app, host=config.http_server.host, port=config.http_server.port, log_level=config.http_server.log_level
     )
 
     server = uvicorn.Server(uvicorn_config)
