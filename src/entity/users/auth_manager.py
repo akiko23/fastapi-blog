@@ -5,10 +5,10 @@ from fastapi_users import BaseUserManager, IntegerIDMixin, models
 from fastapi_users.db import BaseUserDatabase
 from fastapi_users.password import PasswordHelperProtocol
 
+from depends_stub import Stub
 from src.config import BackendConfig
-from src.auth.db import get_user_db
+from src.entity.users.db import get_user_db
 from src.entity.users.models import User
-from src.stubs import get_config_stub
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -40,7 +40,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
 
 async def get_user_manager(
-        user_db: BaseUserDatabase = Depends(get_user_db),
-        config: BackendConfig = Depends(get_config_stub)
+    user_db: BaseUserDatabase = Depends(get_user_db),
+    config: BackendConfig = Depends(Stub(BackendConfig))
 ):
     yield UserManager(user_db, config.app.jwt_secret)

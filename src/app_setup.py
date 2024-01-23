@@ -1,15 +1,15 @@
 from functools import partial
 
 from fastapi import APIRouter, FastAPI
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from depends_stub import Stub
 from src.config import BackendConfig
 from src.consts import APP_DOTENV_PATH
 from src.database.dependencies import get_session
 from src.database.sa_utils import create_engine, create_session_maker
-from src.database.stubs import get_session_stub
 from src.dependencies import get_config
-from src.auth.router import router as auth_router
-from src.stubs import get_config_stub
+from src.entity.users.router import router as users_router
 
 router = APIRouter()
 
@@ -21,17 +21,17 @@ async def read_main():
 
 def initialise_routers(app: FastAPI) -> None:
     app.include_router(router)
-    app.include_router(auth_router)
+    app.include_router(users_router)
 
 
 def initialise_dependencies(app: FastAPI, config: BackendConfig) -> None:
     engine = create_engine(config.db.uri)
     session_factory = create_session_maker(engine)
 
-    app.dependency_overrides[get_session_stub] = partial(
+    app.dependency_overrides[Stub(AsyncSession)] = partial(
         get_session, session_factory
     )
-    app.dependency_overrides[get_config_stub] = partial(
+    app.dependency_overrides[Stub(BackendConfig)] = partial(
         get_config, APP_DOTENV_PATH
     )
 
