@@ -1,4 +1,6 @@
 import asyncio
+import subprocess
+import time
 from asyncio import AbstractEventLoop
 from typing import AsyncGenerator, Generator, TypeAlias
 
@@ -13,18 +15,15 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import sessionmaker
 
+from database.base import Base
 from src.app_setup import create_app, initialise_routers
 from src.config import BackendConfig, load_app_config
-from src.database.base import Base
 from src.database.dependencies import create_session
 from src.database.sa_utils import create_session_maker
 from src.entity.models import *  # noqa
 
 BASE_URL = "http://test"
-
 TEST_DOTENV_PATH = ".envs/test.env"
-TEST_DB_PATH = "tests/test.db"
-TEST_DB_DSN = f"sqlite+aiosqlite:///{TEST_DB_PATH}"
 
 SessionMaker: TypeAlias = sessionmaker[AsyncSession]
 
@@ -56,20 +55,32 @@ async def client(app: FastAPI) -> AsyncClient:
 
 
 @pytest.fixture(scope="session")
-def db_path() -> str:
-    return TEST_DB_PATH
+def initialise_test_db(config: BackendConfig) -> None:
+    subprocess.run("docker run "
+                   "--name pgsql-test "
+                   f"-e POSTGRES_USER={config.db.user} "
+                   f"-e POSTGRES_PASSWORD={config.db.password} "
+                   f"-e POSTGRES_DB={config.db.name} "
+                   f"-p {config.db.port}:5432 "
+                   "-d postgres")
+    time.sleep(2)  # waiting until the database is ready to accept connections
+    yield
+    subprocess.run("docker stop pgsql-test")
+    subprocess.run("docker rm pgsql-test")
 
 
 @pytest.fixture(scope="session")
-def engine() -> AsyncEngine:
-    return create_async_engine(TEST_DB_DSN, echo=False)
+def engine(config: BackendConfig, initialise_test_db: ...) -> AsyncEngine:
+    return create_async_engine(config.db.uri, echo=True)
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
-async def initialise_test_db(engine: AsyncEngine) -> None:
+async def initialise_migrations(engine: AsyncEngine) -> None:
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
 
 
 @pytest.fixture(scope="session")
