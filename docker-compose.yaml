@@ -23,7 +23,7 @@ services:
     env_file: .envs/app.env
     command: sh -c "python -m alembic upgrade head"
 
-  psql:
+  pgsql:
     image: postgres:16.0-alpine3.18
     container_name: psql
     env_file:
