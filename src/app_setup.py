@@ -4,12 +4,15 @@ from fastapi import APIRouter, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from depends_stub import Stub
+from src.entity.users.gateway import UserGateway
 from src.config import BackendConfig
 from src.consts import APP_DOTENV_PATH
 from src.database.dependencies import get_session
 from src.database.sa_utils import create_engine, create_session_maker
 from src.dependencies import get_config
 from src.entity.users.router import router as users_router
+
+from src.entity.users.dependencies import get_user_gateway
 
 router = APIRouter()
 
@@ -34,6 +37,8 @@ def initialise_dependencies(app: FastAPI, config: BackendConfig) -> None:
     app.dependency_overrides[Stub(BackendConfig)] = partial(
         get_config, APP_DOTENV_PATH
     )
+
+    app.dependency_overrides[Stub(UserGateway)] = get_user_gateway
 
 
 def create_app(config: BackendConfig) -> FastAPI:

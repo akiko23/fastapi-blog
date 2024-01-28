@@ -13,7 +13,7 @@ class UserRead(schemas.BaseUser):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    username: Optional[str]
+    username: Optional[str] = None
 
 
 class UserUpdate(schemas.BaseUserUpdate):

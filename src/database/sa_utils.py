@@ -26,10 +26,6 @@ def create_engine(db_uri: str) -> AsyncEngine:
         "pool_size": 15,
         "max_overflow": 15,
     }
-    if "test" in db_uri:
-        # The engine of test db (sqlite) doesn't support this params
-        engine_options.update(pool_size=None, max_overflow=None)
-
     return create_async_engine(db_uri, **engine_options)
 
 
