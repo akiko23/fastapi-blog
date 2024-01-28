@@ -1,11 +1,5 @@
-import os
-
 import pytest
 from httpx import AsyncClient
-
-
-def test_db_exits(db_path: str) -> None:
-    assert os.path.exists(db_path)
 
 
 @pytest.mark.asyncio

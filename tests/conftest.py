@@ -15,11 +15,11 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import sessionmaker
 
-from database.base import Base
-from src.app_setup import create_app, initialise_routers
+from src.app_setup import create_app, initialise_routers, initialise_dependencies
 from src.config import BackendConfig, load_app_config
 from src.database.dependencies import create_session
 from src.database.sa_utils import create_session_maker
+from src.database.base import Base
 from src.entity.models import *  # noqa
 
 BASE_URL = "http://test"
@@ -44,13 +44,13 @@ def config() -> BackendConfig:
 def app(config: BackendConfig) -> FastAPI:
     app = create_app(config)
     initialise_routers(app)
-
+    initialise_dependencies(app, config)
     return app
 
 
 @pytest_asyncio.fixture(scope="session")
 async def client(app: FastAPI) -> AsyncClient:
-    async with AsyncClient(app=app, base_url=BASE_URL) as ac:
+    async with AsyncClient(app=app, base_url=BASE_URL, headers={"Accept": "application/json"}) as ac:
         yield ac
 
 
@@ -89,9 +89,9 @@ def session_factory(engine: AsyncEngine) -> SessionMaker:
     return session_maker
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 async def session(
         session_factory: SessionMaker,
 ) -> AsyncGenerator[AsyncSession, None]:
-    async with create_session(session_factory) as session:
-        yield session
+    async with create_session(session_factory) as async_session:
+        yield async_session
