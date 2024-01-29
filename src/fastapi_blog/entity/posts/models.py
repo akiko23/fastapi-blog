@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database.base import Base
-from src.database.mixins import TablenameMixin, TimestampColumnsMixin
+from fastapi_blog.database.base import Base
+from fastapi_blog.database.mixins import TablenameMixin, TimestampColumnsMixin
 
 if TYPE_CHECKING:
-    from src.entity.comments.models import Comment
-    from src.entity.likes.models import Like
-    from src.entity.users.models import User
+    from fastapi_blog.entity.comments.models import Comment
+    from fastapi_blog.entity.likes.models import Like
+    from fastapi_blog.entity.users.models import User
 
 MAX_POST_TITLE_LENGTH = 128
 MAX_POST_TEXT_LENGTH = 4096

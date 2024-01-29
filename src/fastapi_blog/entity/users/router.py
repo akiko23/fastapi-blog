@@ -7,10 +7,10 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 
-from depends_stub import Stub
-from src.config import BackendConfig
-from src.entity.users.dependencies import get_user_service
-from src.entity.users.schemas import UserCreate, UserRead, UserUpdate
+from fastapi_blog.depends_stub import Stub
+from fastapi_blog.config import BackendConfig
+from fastapi_blog.entity.users.dependencies import get_user_service
+from fastapi_blog.entity.users.schemas import UserCreate, UserRead, UserUpdate
 
 router = APIRouter(prefix="/users")
 

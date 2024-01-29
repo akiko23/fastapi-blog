@@ -4,11 +4,11 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database.base import Base
-from src.database.mixins import TablenameMixin
-from src.entity.comments.models import Comment
-from src.entity.likes.models import Like
-from src.entity.posts.models import Post
+from fastapi_blog.database.base import Base
+from fastapi_blog.database.mixins import TablenameMixin
+from fastapi_blog.entity.comments.models import Comment
+from fastapi_blog.entity.likes.models import Like
+from fastapi_blog.entity.posts.models import Post
 
 MAX_NICKNAME_LENGTH = 64
 

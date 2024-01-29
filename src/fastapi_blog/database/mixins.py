@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
-from src.database.base import Base
+from fastapi_blog.database.base import Base
 
 
 class TablenameMixin:

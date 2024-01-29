@@ -1,10 +1,9 @@
-
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from src.database.sa_utils import create_session
+from fastapi_blog.database.sa_utils import create_session
 
 
 async def get_session(session_factory: sessionmaker[AsyncSession]) -> AsyncGenerator[AsyncSession, None]:

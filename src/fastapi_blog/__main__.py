@@ -2,13 +2,13 @@ import asyncio
 
 import uvicorn
 
-from src.app_setup import (
+from fastapi_blog.app_setup import (
     create_app,
     initialise_dependencies,
     initialise_routers,
 )
-from src.config import load_app_config
-from src.consts import APP_DOTENV_PATH
+from fastapi_blog.config import load_app_config
+from fastapi_blog.consts import APP_DOTENV_PATH
 
 
 async def main() -> None:

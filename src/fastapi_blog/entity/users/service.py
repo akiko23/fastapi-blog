@@ -4,8 +4,8 @@ from fastapi import Request
 from fastapi_users import BaseUserManager, IntegerIDMixin
 from fastapi_users.password import PasswordHelperProtocol
 
-from src.entity.users.gateway import UserGateway
-from src.entity.users.models import User
+from fastapi_blog.entity.users.gateway import UserGateway
+from fastapi_blog.entity.users.models import User
 
 
 class UserService(IntegerIDMixin, BaseUserManager[User, int]):

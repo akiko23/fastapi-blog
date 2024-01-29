@@ -4,7 +4,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseOA
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.entity.users.models import User
+from fastapi_blog.entity.users.models import User
 
 
 class UserGateway(SQLAlchemyUserDatabase):
