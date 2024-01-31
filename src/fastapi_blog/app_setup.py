@@ -4,16 +4,15 @@ import uvicorn
 from fastapi import APIRouter, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi_blog.depends_stub import Stub
-from fastapi_blog.entity.users.gateway import UserGateway
-from fastapi_blog.config import BackendConfig, AppConfig, HttpServerConfig
+from fastapi_blog.config import AppConfig, BackendConfig, HttpServerConfig
 from fastapi_blog.consts import APP_DOTENV_PATH
 from fastapi_blog.database.dependencies import get_session
 from fastapi_blog.database.sa_utils import create_engine, create_session_maker
 from fastapi_blog.dependencies import get_config
-from fastapi_blog.entity.users.router import router as users_router
-
+from fastapi_blog.depends_stub import Stub
 from fastapi_blog.entity.users.dependencies import get_user_gateway
+from fastapi_blog.entity.users.gateway import UserGateway
+from fastapi_blog.entity.users.router import router as users_router
 
 router = APIRouter()
 

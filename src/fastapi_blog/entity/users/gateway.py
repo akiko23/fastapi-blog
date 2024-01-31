@@ -1,6 +1,9 @@
-from typing import Type, Optional
+from typing import Optional, Type
 
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseOAuthAccountTable
+from fastapi_users_db_sqlalchemy import (
+    SQLAlchemyBaseOAuthAccountTable,
+    SQLAlchemyUserDatabase,
+)
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 

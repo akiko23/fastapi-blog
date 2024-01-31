@@ -6,9 +6,9 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from src.config import load_app_config
-from src.database.base import Base
-from src.entity.models import *  # noqa
+from fastapi_blog.config import load_app_config
+from fastapi_blog.database.base import Base
+from fastapi_blog.entity.models import *  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

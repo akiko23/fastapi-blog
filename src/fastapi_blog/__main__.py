@@ -1,7 +1,5 @@
 import asyncio
 
-import uvicorn
-
 from fastapi_blog.app_setup import (
     create_app,
     initialise_dependencies,
@@ -9,7 +7,6 @@ from fastapi_blog.app_setup import (
 )
 from fastapi_blog.config import load_app_config
 from fastapi_blog.consts import APP_DOTENV_PATH
-
 from src.fastapi_blog.app_setup import create_http_server
 
 

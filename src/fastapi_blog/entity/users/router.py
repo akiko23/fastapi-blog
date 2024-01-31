@@ -7,8 +7,8 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 
-from fastapi_blog.depends_stub import Stub
 from fastapi_blog.config import BackendConfig
+from fastapi_blog.depends_stub import Stub
 from fastapi_blog.entity.users.dependencies import get_user_service
 from fastapi_blog.entity.users.schemas import UserCreate, UserRead, UserUpdate
 

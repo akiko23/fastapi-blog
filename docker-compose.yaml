@@ -9,7 +9,7 @@ services:
       - "8000:8000"
     restart: always
     depends_on:
-      - psql
+      - pgsql
       - db_migration
 
   db_migration:
@@ -19,7 +19,7 @@ services:
     container_name: db_migration
     restart: "on-failure"
     depends_on:
-      - psql
+      - pgsql
     env_file: .envs/app.env
     command: sh -c "python -m alembic upgrade head"
 

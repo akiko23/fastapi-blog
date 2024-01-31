@@ -1,11 +1,10 @@
 import logging
+import os
 from dataclasses import dataclass
+from types import NoneType
+from typing import Any, Optional, TypeVar
 
 from dotenv import load_dotenv
-
-import os
-from types import NoneType
-from typing import Any, TypeVar, Optional
 
 logger = logging.getLogger(__name__)
 
