@@ -15,12 +15,12 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import sessionmaker
 
-from src.app_setup import create_app, initialise_routers, initialise_dependencies
-from src.config import BackendConfig, load_app_config
-from src.database.dependencies import create_session
-from src.database.sa_utils import create_session_maker
-from src.database.base import Base
-from src.entity.models import *  # noqa
+from fastapi_blog.app_setup import create_app, initialise_routers, initialise_dependencies
+from fastapi_blog.config import BackendConfig, load_app_config
+from fastapi_blog.database.dependencies import create_session
+from fastapi_blog.database.sa_utils import create_session_maker
+from fastapi_blog.database.base import Base
+from fastapi_blog.entity.models import *  # noqa
 
 BASE_URL = "http://test"
 TEST_DOTENV_PATH = ".envs/test.env"

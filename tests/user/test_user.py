@@ -2,9 +2,9 @@ import pytest
 from fastapi_users.jwt import generate_jwt
 from httpx import AsyncClient
 
-from src.config import BackendConfig
-from src.entity.users.schemas import UserCreate
-from src.entity.users.service import UserService
+from fastapi_blog.config import BackendConfig
+from fastapi_blog.entity.users.schemas import UserCreate
+from fastapi_blog.entity.users.service import UserService
 
 
 @pytest.mark.asyncio

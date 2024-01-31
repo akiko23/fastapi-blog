@@ -1,10 +1,10 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from config import BackendConfig
-from src.entity.users.gateway import UserGateway
-from src.entity.users.models import User
-from src.entity.users.service import UserService
+from fastapi_blog.config import BackendConfig
+from fastapi_blog.entity.users.gateway import UserGateway
+from fastapi_blog.entity.users.models import User
+from fastapi_blog.entity.users.service import UserService
 
 
 @pytest.fixture(scope="session")
