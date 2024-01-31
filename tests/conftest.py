@@ -42,7 +42,7 @@ def config() -> BackendConfig:
 
 @pytest.fixture(scope="session")
 def app(config: BackendConfig) -> FastAPI:
-    app = create_app(config)
+    app = create_app(config.app)
     initialise_routers(app)
     initialise_dependencies(app, config)
     return app

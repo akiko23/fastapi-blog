@@ -1,11 +1,12 @@
 from functools import partial
 
+import uvicorn
 from fastapi import APIRouter, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_blog.depends_stub import Stub
 from fastapi_blog.entity.users.gateway import UserGateway
-from fastapi_blog.config import BackendConfig
+from fastapi_blog.config import BackendConfig, AppConfig, HttpServerConfig
 from fastapi_blog.consts import APP_DOTENV_PATH
 from fastapi_blog.database.dependencies import get_session
 from fastapi_blog.database.sa_utils import create_engine, create_session_maker
@@ -41,6 +42,13 @@ def initialise_dependencies(app: FastAPI, config: BackendConfig) -> None:
     app.dependency_overrides[Stub(UserGateway)] = get_user_gateway
 
 
-def create_app(config: BackendConfig) -> FastAPI:
-    app = FastAPI(title=config.app.title, description=config.app.description)
+def create_app(app_cfg: AppConfig) -> FastAPI:
+    app = FastAPI(title=app_cfg.title, description=app_cfg.description)
     return app
+
+
+def create_http_server(app: FastAPI, http_server_cfg: HttpServerConfig):
+    uvicorn_config = uvicorn.Config(
+        app, host=http_server_cfg.host, port=http_server_cfg.port, log_level=http_server_cfg.log_level
+    )
+    return uvicorn.Server(uvicorn_config)

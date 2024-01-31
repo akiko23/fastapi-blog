@@ -10,19 +10,17 @@ from fastapi_blog.app_setup import (
 from fastapi_blog.config import load_app_config
 from fastapi_blog.consts import APP_DOTENV_PATH
 
+from src.fastapi_blog.app_setup import create_http_server
+
 
 async def main() -> None:
     config = load_app_config(APP_DOTENV_PATH)
-    app = create_app(config)
+    app = create_app(config.app)
 
     initialise_routers(app)
     initialise_dependencies(app, config)
 
-    uvicorn_config = uvicorn.Config(
-        app, host=config.http_server.host, port=config.http_server.port, log_level=config.http_server.log_level
-    )
-
-    server = uvicorn.Server(uvicorn_config)
+    server = create_http_server(app, config.http_server)
     await server.serve()
 
 
