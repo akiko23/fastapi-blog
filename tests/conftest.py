@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import subprocess
 import time
 from asyncio import AbstractEventLoop
@@ -20,14 +21,14 @@ from fastapi_blog.app_setup import (
     initialise_dependencies,
     initialise_routers,
 )
-from fastapi_blog.config import BackendConfig, load_app_config
+from fastapi_blog.config import BackendConfig, load_config
 from fastapi_blog.database.base import Base
 from fastapi_blog.database.dependencies import create_session
 from fastapi_blog.database.sa_utils import create_session_maker
 from fastapi_blog.entity.models import *  # noqa
 
 BASE_URL = "http://test"
-TEST_DOTENV_PATH = ".envs/test.env"
+TEST_CONFIG_PATH = ".configs/test.toml"
 
 SessionMaker: TypeAlias = sessionmaker[AsyncSession]
 
@@ -41,7 +42,7 @@ def event_loop() -> Generator[AbstractEventLoop, None, None]:
 
 @pytest.fixture(scope="session")
 def config() -> BackendConfig:
-    return load_app_config(TEST_DOTENV_PATH)
+    return load_config(TEST_CONFIG_PATH)
 
 
 @pytest.fixture(scope="session")
@@ -53,8 +54,8 @@ def app(config: BackendConfig) -> FastAPI:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def client(app: FastAPI) -> AsyncClient:
-    async with AsyncClient(app=app, base_url=BASE_URL, headers={"Accept": "application/json"}) as ac:
+async def client(app: FastAPI, config: BackendConfig) -> AsyncClient:
+    async with AsyncClient(app=app, base_url=config.http_server.host, headers={"Accept": "application/json"}) as ac:
         yield ac
 
 

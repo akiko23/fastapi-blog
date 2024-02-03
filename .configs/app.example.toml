@@ -1,0 +1,19 @@
+# Your backend secrets
+
+[app]
+title = "fastapi-blog"
+description = "A sample blog developed using FastAPI"
+jwt_secret = "SECRET"
+
+[http_server]
+host = "0.0.0.0"
+port = 8000
+log_level = "info"
+
+
+[db]
+user = "postgres"
+password = "postgres"
+name = "postgres"
+host = "localhost"
+port = 5432

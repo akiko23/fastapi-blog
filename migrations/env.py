@@ -6,14 +6,15 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from fastapi_blog.config import load_app_config
+from fastapi_blog.config import load_config
+from fastapi_blog.consts import CONFIG_PATH
 from fastapi_blog.database.base import Base
 from fastapi_blog.entity.models import *  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-dev_cfg = load_app_config(".envs/app.env")
+dev_cfg = load_config(CONFIG_PATH)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

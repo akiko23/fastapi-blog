@@ -5,13 +5,13 @@ from fastapi_blog.app_setup import (
     initialise_dependencies,
     initialise_routers,
 )
-from fastapi_blog.config import load_app_config
-from fastapi_blog.consts import APP_DOTENV_PATH
+from fastapi_blog.config import load_config
+from fastapi_blog.consts import CONFIG_PATH
 from src.fastapi_blog.app_setup import create_http_server
 
 
 async def main() -> None:
-    config = load_app_config(APP_DOTENV_PATH)
+    config = load_config(CONFIG_PATH)
     app = create_app(config.app)
 
     initialise_routers(app)

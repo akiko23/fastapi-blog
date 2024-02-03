@@ -1,10 +1,8 @@
 import logging
-import os
 from dataclasses import dataclass
-from types import NoneType
-from typing import Any, Optional, TypeVar
+from typing import Optional, TypeVar
 
-from dotenv import load_dotenv
+import toml
 
 logger = logging.getLogger(__name__)
 
@@ -22,38 +20,18 @@ class ConfigParseError(ValueError):
     pass
 
 
-def get_env_var_or_err(name: str) -> str:
-    var = os.getenv(name)
-    if not var:
-        logger.error("%s is not set", name)
-        raise ConfigParseError(f"{name} is not set")
-    return var
-
-
-def cast_var(type_: type[T], name: str, value: Any) -> T:
-    try:
-        return type_(value)
-    except (TypeError, ValueError):
-        var_type = type(value)
-        if var_type is NoneType:
-            return None
-
-        logger.error("Type of %s must be %s, not %s", name, type_, var_type)
-        raise ConfigParseError(f"Type of {name} must be {type_.__name__}, not {var_type.__name__}")
-
-
-@dataclass
+@dataclass(kw_only=True)
 class AppConfig:
-    title: str
-    description: str
+    title: str = DEFAULT_APP_TITLE
+    description: str = DEFAULT_APP_DESCRIPTION
     jwt_secret: str
 
 
 @dataclass
 class HttpServerConfig:
-    host: str
-    port: int
-    log_level: str
+    host: str = DEFAULT_SERVER_HOST
+    port: int = DEFAULT_SERVER_PORT
+    log_level: str = DEFAULT_SERVER_LOG_LEVEL
 
 
 @dataclass
@@ -78,25 +56,11 @@ class BackendConfig:
     db: Database
 
 
-def load_app_config(dotenv_path: Optional[str] = None) -> BackendConfig:
-    load_dotenv(dotenv_path)
-
+def load_config(config_path: str) -> BackendConfig:
+    with open(config_path, 'r') as config_file:
+        data = toml.load(config_file)
     return BackendConfig(
-        app=AppConfig(
-            title=os.getenv("APP_TITLE", DEFAULT_APP_TITLE),
-            description=os.getenv("APP_DESCRIPTION", DEFAULT_APP_DESCRIPTION),
-            jwt_secret=get_env_var_or_err("JWT_SECRET"),
-        ),
-        http_server=HttpServerConfig(
-            host=os.getenv("APP_HOST", DEFAULT_SERVER_HOST),
-            port=cast_var(int, "APP_PORT", os.getenv("APP_PORT", DEFAULT_SERVER_PORT)),
-            log_level=os.getenv("APP_LOG_LEVEL", DEFAULT_SERVER_LOG_LEVEL),
-        ),
-        db=Database(
-            user=get_env_var_or_err("DB_USER"),
-            password=get_env_var_or_err("DB_PASSWORD"),
-            name=get_env_var_or_err("DB_NAME"),
-            host=get_env_var_or_err("DB_HOST"),
-            port=cast_var(int, "DB_PORT", get_env_var_or_err("DB_PORT")),
-        )
+        app=AppConfig(**data["app"]),
+        http_server=HttpServerConfig(**data["http_server"]),
+        db=Database(**data["db"])
     )

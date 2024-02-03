@@ -77,7 +77,10 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
-    "migrations/versions"
+    "migrations/versions",
+    ".configs/app.toml",
+    ".configs/test.toml",
+    ".configs/db.env",
 ]
 
 # Same as Black.
