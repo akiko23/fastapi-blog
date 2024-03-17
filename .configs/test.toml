@@ -1,0 +1,16 @@
+# Your tests secrets
+
+[app]
+jwt_secret = "SECRET"
+
+[http_server]
+host = "http://test"
+
+[db]
+user = "test"
+password = "12345qwerty"
+name = "test"
+host = "localhost"
+port = 5435
+
+

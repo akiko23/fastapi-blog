@@ -168,7 +168,3 @@ cython_debug/
 
 # Other files
 .DS_Store
-
-# configs
-.configs/app.toml
-.configs/test.toml
