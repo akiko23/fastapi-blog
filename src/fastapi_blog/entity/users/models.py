@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import String, func
@@ -13,20 +14,18 @@ from fastapi_blog.entity.posts.models import Post
 MAX_NICKNAME_LENGTH = 64
 
 
-class User(Base, TablenameMixin, SQLAlchemyBaseUserTable):
+class User(Base, TablenameMixin, SQLAlchemyBaseUserTable):  # type: ignore
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(
-        String(MAX_NICKNAME_LENGTH), unique=True
-    )
+    username: Mapped[str] = mapped_column(String(MAX_NICKNAME_LENGTH), unique=True)
     registered_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     # relationships
-    posts: Mapped[list["Post"]] = relationship(
+    posts: Mapped[List["Post"]] = relationship(
         back_populates="user", cascade="all, delete"
     )
-    comments: Mapped[list["Comment"]] = relationship(
+    comments: Mapped[List["Comment"]] = relationship(
         back_populates="user", cascade="all, delete"
     )
-    likes: Mapped[list["Like"]] = relationship(
+    likes: Mapped[List["Like"]] = relationship(
         back_populates="user", cascade="all, delete"
     )

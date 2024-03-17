@@ -1,6 +1,5 @@
 import logging
 from dataclasses import dataclass
-from typing import Optional, TypeVar
 
 import toml
 
@@ -13,18 +12,12 @@ DEFAULT_SERVER_HOST: str = "0.0.0.0"
 DEFAULT_SERVER_PORT: int = 8000
 DEFAULT_SERVER_LOG_LEVEL: str = "info"
 
-T = TypeVar("T")
 
-
-class ConfigParseError(ValueError):
-    pass
-
-
-@dataclass(kw_only=True)
+@dataclass(kw_only=True)  # type: ignore[call-overload]
 class AppConfig:
     title: str = DEFAULT_APP_TITLE
     description: str = DEFAULT_APP_DESCRIPTION
-    jwt_secret: str
+    jwt_secret: str  # type: ignore[misc]
 
 
 @dataclass
@@ -50,17 +43,17 @@ class Database:
 
 
 @dataclass
-class BackendConfig:
+class Config:
     app: AppConfig
     http_server: HttpServerConfig
     db: Database
 
 
-def load_config(config_path: str) -> BackendConfig:
-    with open(config_path, 'r') as config_file:
+def load_config(config_path: str) -> Config:
+    with open(config_path, "r") as config_file:
         data = toml.load(config_file)
-    return BackendConfig(
+    return Config(
         app=AppConfig(**data["app"]),
         http_server=HttpServerConfig(**data["http_server"]),
-        db=Database(**data["db"])
+        db=Database(**data["db"]),
     )

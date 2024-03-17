@@ -6,7 +6,6 @@ jwt_secret = "SECRET"
 [http_server]
 host = "http://test"
 
-## Name of your test user
 [db]
 user = "test"
 password = "12345qwerty"

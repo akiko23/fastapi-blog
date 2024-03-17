@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -15,7 +15,7 @@ MAX_POST_TITLE_LENGTH = 128
 MAX_POST_TEXT_LENGTH = 4096
 
 
-class Post(Base, TablenameMixin, TimestampColumnsMixin):
+class Post(Base, TablenameMixin, TimestampColumnsMixin):  # type: ignore[misc]
     """Represent table 'posts' in database."""
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -27,9 +27,9 @@ class Post(Base, TablenameMixin, TimestampColumnsMixin):
 
     # relationships
     user: Mapped["User"] = relationship(back_populates="posts")
-    comments: Mapped[list["Comment"]] = relationship(
+    comments: Mapped[List["Comment"]] = relationship(
         back_populates="post", cascade="all, delete"
     )
-    likes: Mapped[list["Like"]] = relationship(
+    likes: Mapped[List["Like"]] = relationship(
         back_populates="post", cascade="all, delete"
     )

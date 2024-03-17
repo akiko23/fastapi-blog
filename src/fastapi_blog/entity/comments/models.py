@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 MAX_COMMENT_LENGTH = 4096
 
 
-class Comment(Base, TablenameMixin, TimestampColumnsMixin):
+class Comment(Base, TablenameMixin, TimestampColumnsMixin):  # type: ignore[misc]
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(String(MAX_COMMENT_LENGTH))
 
@@ -29,6 +29,6 @@ class Comment(Base, TablenameMixin, TimestampColumnsMixin):
     post: Mapped["Post"] = relationship(
         back_populates="comments", foreign_keys=[post_id]
     )
-    likes: Mapped[list["Like"]] = relationship(
+    likes: Mapped[List["Like"]] = relationship(
         back_populates="comment", cascade="all, delete"
     )

@@ -120,12 +120,30 @@ line-ending = "auto"
 
 # Isort configuration
 [tool.isort]
+skip = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    "build",
+    "dist",
+    "alembic/versions",
+    "venv",
+]
 include_trailing_comma = true
 use_parentheses = true
 multi_line_output = 3
 
 
 [tool.mypy]
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    "build",
+    "dist",
+    "src/fastapi_blog/migrations/versions",
+    "venv",
+]
 strict = true
 python_version = "3.8"
 ignore_missing_imports = true

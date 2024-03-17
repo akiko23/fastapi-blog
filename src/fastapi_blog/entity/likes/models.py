@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from fastapi_blog.entity.users.models import User
 
 
-class Like(Base, TablenameMixin, TimestampColumnsMixin):
+class Like(Base, TablenameMixin, TimestampColumnsMixin):  # type: ignore[misc]
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     # Foreign keys
