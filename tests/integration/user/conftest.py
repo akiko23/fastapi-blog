@@ -8,10 +8,5 @@ from fastapi_blog.entity.users.service import UserService
 
 
 @pytest.fixture(scope="session")
-def user_gateway(session: AsyncSession):
-    return UserRepository(session, User)
-
-
-@pytest.fixture(scope="session")
-def user_service(user_gateway: UserRepository, config: Config) -> UserService:
-    return UserService(user_gateway, config.app.jwt_secret)
+def user_service(session: AsyncSession, config: Config) -> UserService:
+    return UserService(UserRepository(session, User), config.app.jwt_secret)
